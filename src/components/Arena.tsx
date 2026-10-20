@@ -39,12 +39,12 @@ export default function Arena() {
   };
 
   const handlePress = (index: number) => {
-    if (!users) return;
+    if (!users || !users.User1.trim() || !users.User2.trim()) return;
+    if (isFinish) return;
 
     if (board[index] !== null) return;
 
     const newBoard = [...board];
-
     newBoard[index] = turn;
 
     setBoard(newBoard);
@@ -57,14 +57,19 @@ export default function Arena() {
       return;
     }
 
+    if (newBoard.every((cell) => cell !== null)) {
+      setIsFinish(true);
+      return;
+    }
+
     setTurn(turn === "X" ? "O" : "X");
   };
 
   const refresh = () => {
     setBoard(Array(9).fill(null));
-    setIsFinish(false);
     setTurn("X");
-    return;
+    setIsFinish(false);
+    setWinner(null);
   };
 
   return (
@@ -121,7 +126,7 @@ export default function Arena() {
           <Text>
             {winner
               ? `${winner === "X" ? users?.User1 : users?.User2} Qalib Geldi`
-              : `Hec-Hece`}
+              : `Hec-Hece!`}
           </Text>
         )}
       </View>
